@@ -1,0 +1,53 @@
+name: PCFORGE CI
+
+on:
+  push:
+    branches: [main, "feature/**", "refactor/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcforge-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+        if: ${{ hashFiles('package-lock.json') != '' }}
+
+      - name: Set up Node.js (without lockfile)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+        if: ${{ hashFiles('package-lock.json') == '' }}
+
+      - name: Install dependencies
+        run: |
+          if [ ! -f package.json ]; then
+            echo "::error::package.json is missing. Upload the PCFORGE application source before expecting CI to build it."
+            exit 1
+          fi
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build application
+        run: npm run build
+
+      - name: Build Docker image
+        run: docker build -t pcforge:ci .

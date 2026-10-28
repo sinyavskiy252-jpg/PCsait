@@ -78,7 +78,7 @@ export default function App() {
     setSelected((old) => old.includes(id) ? old.filter((item) => item !== id) : [...old, id]);
   }
 
-  function useBuild(ids: number[]) {
+  function applyBuild(ids: number[]) {
     setSelected(ids);
     setPage("Конфигуратор");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -167,7 +167,7 @@ export default function App() {
                     <div className="build-card-top"><span className="build-label">{build.name}</span><Monitor size={19} /></div>
                     <p>{build.info}</p>
                     <strong className="price">{money(build.price)}</strong>
-                    <button className="button button-red" onClick={() => useBuild(build.ids)}>Использовать</button>
+                    <button className="button button-red" onClick={() => applyBuild(build.ids)}>Использовать</button>
                   </article>
                 ))}
               </div>

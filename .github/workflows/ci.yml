@@ -1,0 +1,29 @@
+name: PCFORGE CI
+
+on:
+  push:
+    branches: [main, "feature/**", "refactor/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Check code style
+        run: npm run lint
+      - name: Build site
+        run: npm run build
+      - name: Build Docker image
+        run: docker build -t pcforge:ci .

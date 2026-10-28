@@ -1,65 +1,85 @@
 # PCFORGE
 
-Учебный сайт-конфигуратор персонального компьютера. Стек приложения: React, TypeScript, Vite, Tailwind CSS, Firebase Authentication и Cloud Firestore.
+Учебный сайт-конфигуратор компьютера. Стек: React, TypeScript, Vite, Tailwind CSS, Firebase Authentication и Cloud Firestore.
 
-## Что входит в проект
+## Возможности
 
-- каталог комплектующих с поиском и фильтрами;
-- выбор деталей и расчёт стоимости сборки;
-- готовые конфигурации;
-- регистрация и вход через Firebase Authentication;
-- сохранение сборок в Firestore;
-- адаптивный интерфейс;
-- Docker / Docker Compose;
-- GitHub Actions для проверки при push и Pull Request;
-- базовые SEO-настройки: метатеги, `robots.txt`, `sitemap.xml`.
+- каталог комплектующих с поиском и фильтрацией по категориям;
+- добавление комплектующих в конфигурацию и подсчёт стоимости;
+- готовые варианты сборок;
+- регистрация, вход и выход через Firebase Authentication;
+- сохранение сборок пользователя в Cloud Firestore;
+- адаптивная тёмная тема с красными акцентами.
 
-## Запуск локально
+## Запуск на компьютере
 
-Требуется Node.js 22+.
+Требуется Node.js 22 или новее.
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Проверка перед Pull Request
+Открой URL, который появится в терминале (обычно `http://localhost:5173`).
+
+## Проверки
 
 ```bash
 npm run lint
 npm run build
-docker compose up --build
+npm run preview
 ```
-
-После запуска Docker сайт будет доступен по адресу http://localhost:8080.
-
-## Git workflow
-
-1. Не коммить напрямую в `main`.
-2. Создавай отдельную ветку для задачи, например `feature/seo-improvements`.
-3. Перед PR запускай lint и build локально.
-4. Открой Pull Request в `main` и дождись GitHub Actions.
-5. Просмотри diff и результаты проверок, затем выполняй merge.
-
-## GitHub Actions
-
-Workflow находится в `.github/workflows/ci.yml`. При наличии исходников приложения он выполняет установку зависимостей, ESLint, production build и сборку Docker-образа. Пока `package.json` не добавлен в репозиторий, workflow явно отмечает, что сборка пропущена: это временная проверка инфраструктурного PR, а не подтверждение сборки приложения.
 
 ## Docker
 
+Требуется Docker Desktop.
+
 ```bash
 docker compose up --build
-docker compose down
 ```
 
-## Firebase и безопасность
+Сайт будет доступен на `http://localhost:8080`. Остановить контейнер: `docker compose down`.
 
-Firebase Web SDK config предназначен для клиентского приложения. Безопасность данных обеспечивается Authentication и Firestore Security Rules. Не добавляй в GitHub service-account JSON, приватные ключи, пароли или локальный файл `.env`. Пример переменных хранится в `.env.example`.
+## Firebase
 
-## SEO перед публикацией
+Клиентская конфигурация находится в `src/firebase.ts`. Включи Email/Password в Firebase Console → Authentication → Sign-in method. Firestore rules в `firestore.rules` разрешают пользователю работать только со своей коллекцией `users/{userId}/builds`. Примени эти правила в Firebase Console перед публикацией.
 
-Перед публикацией замени домен-заглушку в `public/robots.txt` и `public/sitemap.xml` на фактический адрес сайта. Не указывай localhost или выдуманный домен в sitemap/canonical. Для полноценной индексации отдельных экранов React SPA могут понадобиться отдельные URL и предварительный рендеринг.
+Конфигурация Firebase для веб-приложения не является административным ключом. Не добавляй в репозиторий service-account JSON, приватные ключи или другие серверные секреты. Безопасность данных обеспечивают Authentication и Firestore Security Rules.
 
-## Важно
+## GitHub Actions
 
-Этот PR настраивает GitHub, Docker и CI. Чтобы CI проверял приложение, необходимо добавить в репозиторий исходный проект из подготовленного ZIP-архива, включая `package.json`, `src/` и `public/images/`. Не добавляй `node_modules/`, `dist/` или секретные файлы.
+Workflow `.github/workflows/ci.yml` запускается при push и Pull Request в `main`. Он устанавливает зависимости, выполняет ESLint, собирает приложение и проверяет сборку Docker-образа.
+
+## SEO по методичке
+
+- у документа задан язык `ru`, viewport, title, description, robots и Open Graph метаданные;
+- title и description меняются при переключении раздела;
+- используется семантическая структура `header`, `nav`, `main`, `section`, `article`, `footer` и заголовки;
+- у изображений есть `alt`, для карточек используется lazy loading;
+- добавлены `public/robots.txt` и `public/sitemap.xml`;
+- Nginx включает кэширование статических ресурсов и SPA fallback.
+
+**Перед публикацией:** замени `https://example.com` в `public/robots.txt` и `public/sitemap.xml` на фактический адрес сайта. Сейчас разделы приложения переключаются внутри SPA и не имеют отдельных URL. Метаданные обновляются на клиенте, но для более полной индексации отдельных страниц стоит добавить маршрутизацию с отдельными URL и предварительный рендеринг/SSR. SEO-настройки не гарантируют позиции в поиске сами по себе.
+
+## Структура
+
+```text
+public/
+  images/                 изображения комплектующих
+  robots.txt
+  sitemap.xml
+src/
+  components/ProductGrid.tsx
+  data/parts.ts
+  types/part.ts
+  App.tsx                  состояние и основные экраны
+  firebase.ts              подключение Firebase
+  main.tsx                 точка входа
+  styles.css
+eslint.config.js
+.github/workflows/ci.yml
+Dockerfile
+compose.yaml
+nginx.conf
+firestore.rules
+```

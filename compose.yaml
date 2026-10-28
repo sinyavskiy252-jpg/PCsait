@@ -1,8 +1,6 @@
 services:
   pcforge:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: pcforge-site
     ports:
       - "8080:80"

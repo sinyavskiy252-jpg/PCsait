@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# Replace the example domain in sitemap.xml with the deployed site address before publishing.
-Sitemap: https://example.com/sitemap.xml
+# Локальный адрес для практической работы №18.
+Sitemap: https://pcforge.localhost/sitemap.xml

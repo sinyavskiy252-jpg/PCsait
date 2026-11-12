@@ -4,6 +4,7 @@ dist
 .github
 .env
 .env.*
-!.env.example
 coverage
 *.log
+.DS_Store
+deploy/certs

@@ -5,6 +5,7 @@ on:
     branches: [main, "feature/**", "refactor/**"]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,15 +16,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Prepare public Firebase configuration
+        run: cp .env.example .env
+
       - name: Install dependencies
         run: npm install
+
       - name: Check code style
         run: npm run lint
+
       - name: Build site
         run: npm run build
-      - name: Build Docker image
-        run: docker build -t pcforge:ci .
+
+      - name: Build production Docker image
+        run: docker compose --env-file .env -f deploy/docker-compose.yml build

@@ -8,3 +8,5 @@ coverage/
 .idea/
 *.log
 Thumbs.db
+deploy/certs/*.pem
+!deploy/certs/.gitkeep

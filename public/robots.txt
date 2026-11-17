@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# Локальный адрес для практической работы №18.
-Sitemap: https://pcforge.localhost/sitemap.xml
+# Replace example.com with the real site domain before publishing.
+Sitemap: https://example.com/sitemap.xml

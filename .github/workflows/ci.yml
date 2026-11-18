@@ -2,7 +2,7 @@ name: PCFORGE CI
 
 on:
   push:
-    branches: [main, "feature/**", "refactor/**"]
+    branches: [main, "feature/**", "refactor/**", "chore/**"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -10,9 +10,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: pcforge-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-and-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,7 +31,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund
 
       - name: Check code style
         run: npm run lint

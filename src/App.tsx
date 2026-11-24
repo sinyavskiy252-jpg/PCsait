@@ -128,20 +128,20 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <a className="brand" href="#" onClick={(event) => { event.preventDefault(); setPage("Главная"); }}>PCFORGE</a>
-        <button className="mobile-toggle" aria-label="Открыть меню" onClick={() => setMobileMenu(!mobileMenu)}>
+        <a className="brand" href="/" onClick={(event) => { event.preventDefault(); setPage("Главная"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>PCFORGE</a>
+        <button className="mobile-toggle" type="button" aria-label="Открыть меню" aria-controls="primary-navigation" aria-expanded={mobileMenu} onClick={() => setMobileMenu(!mobileMenu)}>
           {mobileMenu ? <X size={20} /> : <Menu size={20} />}
         </button>
-        <nav className={mobileMenu ? "nav nav-open" : "nav"}>
+        <nav id="primary-navigation" className={mobileMenu ? "nav nav-open" : "nav"} aria-label="Основная навигация">
           {["Главная", "Каталог", "Конфигуратор", "Профиль"].map((item) => (
-            <button key={item} className={page === item ? "nav-link active" : "nav-link"} onClick={() => { setPage(item); setMobileMenu(false); }}>
+            <button key={item} type="button" className={page === item ? "nav-link active" : "nav-link"} aria-current={page === item ? "page" : undefined} onClick={() => { setPage(item); setMobileMenu(false); }}>
               {item}
             </button>
           ))}
         </nav>
       </header>
 
-      <main className="main-content">
+      <main id="main-content" className="main-content" tabIndex={-1}>
         {page === "Главная" && (
           <>
             <section className="hero">
@@ -151,7 +151,7 @@ export default function App() {
                 <p>Выбирай комплектующие, проверяй совместимость и рассчитывай стоимость своей сборки.</p>
                 <button className="button button-red" onClick={() => setPage("Конфигуратор")}>Открыть конфигуратор</button>
               </div>
-                <img className="hero-image" src="/images/cases/19images.jpg" alt="Игровой компьютер" />
+                <img className="hero-image" src="/images/cases/19images.jpg" alt="Игровой компьютер в корпусе с боковым стеклом" width="520" height="280" fetchPriority="high" decoding="async" />
             </section>
             <section className="section">
               <div className="section-heading">
@@ -198,7 +198,7 @@ export default function App() {
               <div className="builder-parts">
                 {parts.map((part) => (
                   <article className="builder-row" key={part.id}>
-                    <img src={part.image} alt={part.name} />
+                    <img src={part.image} alt={part.name} width="76" height="64" loading="lazy" decoding="async" />
                     <div className="builder-info"><span className="muted">{part.category}</span><strong>{part.name}</strong><span className="muted">{part.description}</span></div>
                     <strong className="price">{money(part.price)}</strong>
                     <button className={selected.includes(part.id) ? "button button-selected" : "button button-red"} onClick={() => togglePart(part.id)}>{selected.includes(part.id) ? "Убрать" : "Добавить"}</button>

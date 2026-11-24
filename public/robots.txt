@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 
-# Replace example.com with the real site domain before publishing.
-Sitemap: https://example.com/sitemap.xml
+# Локальный адрес для проверки практической работы №19.
+# Перед публикацией на реальном сервере замените URL на публичный HTTPS-домен.
+Sitemap: https://pcforge.localhost:8443/sitemap.xml

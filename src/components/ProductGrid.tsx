@@ -23,7 +23,7 @@ export default function ProductGrid({ items, togglePart, selected }: ProductGrid
       {items.map((part) => (
         <article className="product-card" key={part.id}>
           <div className="product-image-wrap">
-            <img src={part.image} alt={part.name} loading="lazy" />
+            <img src={part.image} alt={part.name} width="300" height="200" loading="lazy" decoding="async" />
           </div>
           <div className="product-card-body">
             <span className="muted">{part.category}</span>

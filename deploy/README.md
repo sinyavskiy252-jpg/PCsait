@@ -14,7 +14,7 @@ PCFORGE — клиентское веб-приложение для просмо
 Nginx (Docker-контейнер pcforge-site)
     | отдаёт собранные статические файлы
     v
-Frontend: React + TypeScript + Tailwind CSS
+Frontend: React + TypeScript (стили находятся внутри тега <style> в index.html; отдельных CSS-файлов нет)
     |
     +---- HTTPS ----> Firebase Authentication
     |                 регистрация и авторизация
@@ -46,17 +46,19 @@ Docker собирает Frontend на этапе build. Nginx раздаёт ф�
 - VITE_FIREBASE_MESSAGING_SENDER_ID
 - VITE_FIREBASE_APP_ID
 
-Локальные значения задаются в PCsait/.env. Файл .env не добавляется в Git. Vite встраивает переменные VITE_* в клиентскую сборку, поэтому их нельзя считать серверными секретами. Защита данных обеспечивается правилами Cloud Firestore и настройками Firebase Authentication.
+Локальные значения задаются в PCsait/.env. Шаблон PCsait/.env.example содержит те же имена переменных без значений. Файл .env не добавляется в Git. Vite встраивает переменные VITE_* в клиентскую сборку, поэтому они являются публичной конфигурацией Firebase Web SDK, а не серверными секретами. Защита данных обеспечивается правилами Cloud Firestore и настройками Firebase Authentication.
+
+Для сборки Docker-образа через GitHub Actions в отдельном репозитории PCFORGE-deploy нужно добавить шесть repository secrets: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_STORAGE_BUCKET, VITE_FIREBASE_MESSAGING_SENDER_ID и VITE_FIREBASE_APP_ID. Значения берутся из локального PCsait/.env. Workflow создаёт временный файл .env в GitHub Actions; локальный файл в Git не отправляется. Не помещай в VITE_* Firebase service-account JSON, приватные ключи или пароли.
 
 ## 4. Команды запуска и остановки
 
-Все команды выполняются в PowerShell из общей папки, где рядом находятся PCsait и PCFORGE-deploy.
+Для локальной разработки требуется Node.js 24.12.0+ и npm 10.9.0+. Все команды выполняются в PowerShell из общей папки, где рядом находятся PCsait и PCFORGE-deploy.
 
 ### Подготовка Frontend
 
 ```powershell
 cd PCsait
-npm install
+npm ci
 Copy-Item .env.example .env
 ```
 

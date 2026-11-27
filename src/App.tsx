@@ -195,12 +195,25 @@ export default function App() {
     <div className="app-shell">
       <header className="topbar">
         <a className="brand" href="/" onClick={(event) => { event.preventDefault(); navigateToPage("Главная"); }}>PCFORGE</a>
-        <button className="mobile-toggle" type="button" aria-label="Открыть меню" aria-controls="primary-navigation" aria-expanded={mobileMenu} onClick={() => setMobileMenu(!mobileMenu)}>
+        <button
+          className="mobile-toggle"
+          type="button"
+          aria-label="Открыть меню"
+          aria-controls="primary-navigation"
+          aria-expanded={mobileMenu}
+          onClick={() => setMobileMenu(!mobileMenu)}
+        >
           {mobileMenu ? <X size={20} /> : <Menu size={20} />}
         </button>
         <nav id="primary-navigation" className={mobileMenu ? "nav nav-open" : "nav"} aria-label="Основная навигация">
           {["Главная", "Каталог", "Конфигуратор", "Профиль"].map((item) => (
-            <button key={item} type="button" className={page === item ? "nav-link active" : "nav-link"} aria-current={page === item ? "page" : undefined} onClick={() => navigateToPage(item as PageName)}>
+            <button
+              key={item}
+              type="button"
+              className={page === item ? "nav-link active" : "nav-link"}
+              aria-current={page === item ? "page" : undefined}
+              onClick={() => navigateToPage(item as PageName)}
+            >
               {item}
             </button>
           ))}
@@ -217,7 +230,15 @@ export default function App() {
                 <p>Выбирай комплектующие, проверяй совместимость и рассчитывай стоимость своей сборки.</p>
                 <button className="button button-red" onClick={() => navigateToPage("Конфигуратор")}>Открыть конфигуратор</button>
               </div>
-                <img className="hero-image" src="/images/cases/19images.jpg" alt="Игровой компьютер в корпусе с боковым стеклом" width="520" height="280" fetchPriority="high" decoding="async" />
+              <img
+                className="hero-image"
+                src="/images/cases/19images.jpg"
+                alt="Игровой компьютер в корпусе с боковым стеклом"
+                width="520"
+                height="280"
+                fetchPriority="high"
+                decoding="async"
+              />
             </section>
             <section className="section">
               <div className="section-heading">
@@ -250,8 +271,23 @@ export default function App() {
 
         {page === "Каталог" && (
           <section className="section page-section">
-            <div className="page-title"><div><p className="eyebrow">КОМПЛЕКТУЮЩИЕ</p><h1>Каталог</h1><p>Выбери детали для своего компьютера.</p></div><span className="catalog-count">{filteredParts.length} товаров</span></div>
-            <label className="search-box"><Search size={18} aria-hidden="true" /><input aria-label="Поиск комплектующих" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Поиск комплектующих..." /></label>
+            <div className="page-title">
+              <div>
+                <p className="eyebrow">КОМПЛЕКТУЮЩИЕ</p>
+                <h1>Каталог</h1>
+                <p>Выбери детали для своего компьютера.</p>
+              </div>
+              <span className="catalog-count">{filteredParts.length} товаров</span>
+            </div>
+            <label className="search-box">
+              <Search size={18} aria-hidden="true" />
+              <input
+                aria-label="Поиск комплектующих"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Поиск комплектующих..."
+              />
+            </label>
             <div className="category-list">{categories.map((item) => <button key={item} type="button" className={category === item ? "category-chip selected" : "category-chip"} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div>
             <ProductGrid items={filteredParts} togglePart={togglePart} selected={selected} />
           </section>
@@ -259,13 +295,23 @@ export default function App() {
 
         {page === "Конфигуратор" && (
           <section className="section page-section">
-            <div className="page-title"><div><p className="eyebrow">СБОРКА КОМПЬЮТЕРА</p><h1>Конфигуратор</h1><p>Добавляй нужные комплектующие и следи за стоимостью.</p></div></div>
+            <div className="page-title">
+              <div>
+                <p className="eyebrow">СБОРКА КОМПЬЮТЕРА</p>
+                <h1>Конфигуратор</h1>
+                <p>Добавляй нужные комплектующие и следи за стоимостью.</p>
+              </div>
+            </div>
             <div className="builder-layout">
               <div className="builder-parts">
                 {parts.map((part) => (
                   <article className="builder-row" key={part.id}>
                     <img src={part.image} alt={part.name} width="76" height="64" loading="lazy" decoding="async" />
-                    <div className="builder-info"><span className="muted">{part.category}</span><strong>{part.name}</strong><span className="muted">{part.description}</span></div>
+                    <div className="builder-info">
+                      <span className="muted">{part.category}</span>
+                      <strong>{part.name}</strong>
+                      <span className="muted">{part.description}</span>
+                    </div>
                     <strong className="price">{money(part.price)}</strong>
                     <button className={selected.includes(part.id) ? "button button-selected" : "button button-red"} onClick={() => togglePart(part.id)}>{selected.includes(part.id) ? "Убрать" : "Добавить"}</button>
                   </article>
@@ -305,10 +351,53 @@ export default function App() {
               </form>
             ) : (
               <>
-                <div className="profile-card"><div className="profile-icon"><UserRound size={28} /></div><div><h2>Ты вошёл в PCFORGE</h2><p>{user.email}</p></div><button className="button button-plain" onClick={() => void signOut(auth)}>Выйти</button></div>
+                <div className="profile-card">
+                  <div className="profile-icon"><UserRound size={28} /></div>
+                  <div>
+                    <h2>Ты вошёл в PCFORGE</h2>
+                    <p>{user.email}</p>
+                  </div>
+                  <button className="button button-plain" type="button" onClick={() => void signOut(auth)}>
+                    Выйти
+                  </button>
+                </div>
                 {authMessage && <p className="auth-message" role="status">{authMessage}</p>}
-                <div className="saved-card"><h2>Текущая сборка</h2><p>{selected.length ? `Выбрано комплектующих: ${selected.length}` : "Пока нет выбранных комплектующих."}</p><strong className="price">{money(total)}</strong><button className="button button-red" disabled={saving || selected.length === 0} onClick={() => void saveBuild()}>{saving ? "Сохраняем..." : "Сохранить сборку"}</button><button className="button button-plain" onClick={() => setPage("Конфигуратор")}>Открыть конфигуратор</button></div>
-                <div className="saved-list"><h2>Сохранённые сборки</h2>{savedBuilds.length === 0 ? <p className="muted">Пока нет сохранённых сборок.</p> : savedBuilds.map((build) => <article className="saved-build" key={build.id}><div><strong>{build.partNames.join(", ") || "Сборка ПК"}</strong><p>{build.partNames.length} комплектующих</p></div><strong className="price">{money(build.total)}</strong></article>)}</div>
+                <div className="saved-card">
+                  <h2>Текущая сборка</h2>
+                  <p>
+                    {selected.length
+                      ? `Выбрано комплектующих: ${selected.length}`
+                      : "Пока нет выбранных комплектующих."}
+                  </p>
+                  <strong className="price">{money(total)}</strong>
+                  <button
+                    className="button button-red"
+                    type="button"
+                    disabled={saving || selected.length === 0}
+                    onClick={() => void saveBuild()}
+                  >
+                    {saving ? "Сохраняем..." : "Сохранить сборку"}
+                  </button>
+                  <button className="button button-plain" type="button" onClick={() => navigateToPage("Конфигуратор")}>
+                    Открыть конфигуратор
+                  </button>
+                </div>
+                <div className="saved-list">
+                  <h2>Сохранённые сборки</h2>
+                  {savedBuilds.length === 0 ? (
+                    <p className="muted">Пока нет сохранённых сборок.</p>
+                  ) : (
+                    savedBuilds.map((build) => (
+                      <article className="saved-build" key={build.id}>
+                        <div>
+                          <strong>{build.partNames.join(", ") || "Сборка ПК"}</strong>
+                          <p>{build.partNames.length} комплектующих</p>
+                        </div>
+                        <strong className="price">{money(build.total)}</strong>
+                      </article>
+                    ))
+                  )}
+                </div>
               </>
             )}
           </section>

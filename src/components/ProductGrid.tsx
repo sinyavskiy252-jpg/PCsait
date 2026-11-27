@@ -33,6 +33,8 @@ export default function ProductGrid({ items, togglePart, selected }: ProductGrid
               <strong className="price">{money(part.price)}</strong>
               <button
                 className={selected.includes(part.id) ? "button button-selected" : "button button-red"}
+                type="button"
+                aria-pressed={selected.includes(part.id)}
                 onClick={() => togglePart(part.id)}
               >
                 {selected.includes(part.id) ? "Добавлено" : "Добавить"}

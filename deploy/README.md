@@ -59,7 +59,7 @@ Docker собирает Frontend на этапе build. Nginx раздаёт ф�
 ```powershell
 cd PCsait
 npm ci
-Copy-Item .env.example .env
+if (!(Test-Path .env)) { Copy-Item .env.example .env }
 ```
 
 Заполнить PCsait/.env параметрами своего Firebase-проекта, затем вернуться в общую папку:
